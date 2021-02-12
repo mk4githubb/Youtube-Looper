@@ -1,11 +1,10 @@
-
-var showPageActionRule = {
+const showPageActionRule = {
     conditions: [
         new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlMatches: '.*youtube.com/.{1,}$', schemes: ['https','http'] },
+            pageUrl: {urlMatches: '.*youtube.com/.{1,}$', schemes: ['https', 'http']},
         })
     ],
-    actions: [ new chrome.declarativeContent.ShowPageAction() ]
+    actions: [new chrome.declarativeContent.ShowPageAction()]
 };
 
 

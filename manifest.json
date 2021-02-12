@@ -1,7 +1,7 @@
 {
-  "name": "looper",
-  "description": "a better looper",
-  "version": "0.1.0",
+  "name": "Youtube Looper",
+  "description": "An app that lets you loop a youtube video between two given times.",
+  "version": "1.0.0",
   "manifest_version": 2,
   "icons": {
     "16": "./resources/icons/infinite16.png",
@@ -14,13 +14,14 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["./foreground/foreground.js", "./foreground/foregroundHelper.js"]
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["./foreground/foreground.js", "./foreground/foregroundHelper.js"],
+      "run_at": "document_start"
     }
   ],
   "page_action": {
     "default_icon": "./resources/icons/infinite64.png",
     "default_popup": "./popup/popup.html"
   },
-  "permissions": [ "tabs", "https://*/*" , "storage" , "declarativeContent"]
+  "permissions": [ "tabs", "storage" , "declarativeContent"]
 }

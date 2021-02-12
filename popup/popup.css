@@ -15,27 +15,56 @@ body {
     padding: 30px;
 }
 
-.topbar {
+
+/*
+ * top bar styles
+ */
+.top-bar {
     padding: 20px 30px 0 40px;
     display: flex;
     align-items: center;
+    font-size: x-large;
 }
 
-.appName {
-    font-size: x-large;
-    margin-left: 10px;
+.top-bar .logo {
+   height: 37px;
+    margin-right: 10px;
 }
+
+.info-container{
+    margin: 15px auto;
+    width: 70%;
+}
+
+/*
+ * form styles
+ */
 
 .main-form {
     width: 70%;
-    margin: 0 auto;
+    margin: 25px auto;
+    opacity: 0.5;
 }
 
 .status {
-    margin-top: 25px;
+    display: none;
+    margin-top: 10px;
     font-size: larger;
     font-weight: bolder;
     text-align: center;
+    background: antiquewhite;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.error-container {
+    font-size: larger;
+    font-weight: bolder;
+    background: crimson;
+    padding: 7px;
+    border-radius: 3px;
+    color: antiquewhite;
+    display: none;
 }
 
 .input-container {
@@ -76,7 +105,7 @@ body {
     border: 2px solid white;
 }
 
-.bottombar {
+.bottom-bar {
     height: 15vh;
     background: rgb(0,212,255);
     background: linear-gradient(90deg, rgba(0,212,255,0.8547794117647058) 0%, rgba(98,25,64,0.865983893557423) 58%);

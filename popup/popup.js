@@ -1,20 +1,35 @@
+let startTimeInput;
+let finishTimeInput;
+let loopItButton;
+let errorContainer;
+let status;
+let videoDuration;
+let form;
+let errorMessage = null;
+
 document.addEventListener('DOMContentLoaded', function () {
-    const x = fetchCurrentState()
+    startTimeInput = document.getElementById("startTime");
+    finishTimeInput = document.getElementById("finishTime");
+    loopItButton = document.getElementById("loopItButton");
+    errorContainer = document.getElementById("errorContainer");
+    status = document.getElementById("status");
+    form = document.getElementById("mainForm");
+
+    fetchCurrentState()
     attachButtonCallback();
 });
 
 const attachButtonCallback = () => {
-    const button = document.getElementById("loopItButton");
-    button.addEventListener("click", (event) => {
+    loopItButton.addEventListener("click", (event) => {
         event.preventDefault();
 
         const userInputTimes = fetchInputTimes();
 
         if(userInputTimes){
             makeRequest("requestOrStop", userInputTimes);
-        }else {
-            alert("Please input correct time.")
+            errorMessage = null;
         }
+        displayErrorMessage();
     })
 }
 
@@ -29,33 +44,55 @@ const makeRequest = (action, userInputTimes) => {
 const fetchCurrentState = () => {
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {action: "fetchCurrentState"}, response => {
-            updatePopupPage(response)
+           updatePopupPage(response)
         });
     });
 }
 
 const fetchInputTimes = () => {
-    const startTime = convertTimeStringToSeconds(document.getElementById("startTime").value);
-    const finishTime = convertTimeStringToSeconds(document.getElementById("finishTime").value);
+    const startTime = convertTimeStringToSeconds(startTimeInput.value);
+    const finishTime = convertTimeStringToSeconds(finishTimeInput.value);
 
-    if(!startTime || !finishTime){
+    if(!startTime || startTime < 0 || startTime > videoDuration){
+        errorMessage = "Please enter a valid start time."
+        return null;
+    }else if( !finishTime|| finishTime < 0 || finishTime < startTime || finishTime > videoDuration ){
+        errorMessage = "Please enter a valid finish time."
         return null;
     }
     return { startTime, finishTime}
 }
 
 const updatePopupPage = (response) => {
-    document.getElementById("status").innerText = response.playable.title;
+    if(chrome.runtime.lastError || !response){
+        console.log("Error Response: ", response)
 
-    if(response.inLoop){
-        document.getElementById("startTime").value = response.playing.startTime;
-        document.getElementById("finishTime").value = response.playing.finishTime;
-        document.getElementById("loopItButton").innerText = "stop it!";
+        errorMessage = "Please try again after the youtube page has been loaded."
+        startTimeInput.disabled = true;
+        finishTimeInput.disabled = true;
+        loopItButton.disabled = true;
+        form.style.opacity= "0";
+        displayErrorMessage();
         return;
     }
-    document.getElementById("startTime").value = "--:--";
-    document.getElementById("finishTime").value = "--:--";
-    document.getElementById("loopItButton").innerText = "loop it!";
+
+    errorMessage = null;
+    status.style.display='block';
+    form.style.opacity = "1";
+
+    status.innerText = response.playable.title;
+    videoDuration = response.playable.duration;
+
+    if(response.inLoop){
+        startTimeInput.value = convertSecondsToFormattedTime(response.playing.startTime);
+        finishTimeInput.value = convertSecondsToFormattedTime(response.playing.finishTime);
+        loopItButton.innerText = "stop it!";
+        return;
+    }
+    startTimeInput.value = "";
+    finishTimeInput.value = "";
+    loopItButton.innerText = "loop it!";
+    displayErrorMessage();
 }
 
 const convertTimeStringToSeconds = (timeString) => {
@@ -66,4 +103,32 @@ const convertTimeStringToSeconds = (timeString) => {
         seconds = seconds*60 + splittedTimes[i];
     }
     return seconds
+}
+
+const convertSecondsToFormattedTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const remainder = Math.round(seconds % 3600);
+    const minutes = Math.floor(remainder / 60);
+    seconds = Math.round(remainder % 60);
+
+    let timeString = ""
+
+    if(hours){
+        timeString += hours.toLocaleString('en-US', {minimumIntegerDigits: 2}) + ":"
+    }
+
+    if(minutes){
+        timeString += minutes.toLocaleString('en-US', {minimumIntegerDigits: 2}) + ":"
+    }
+    timeString += seconds.toLocaleString('en-US', {minimumIntegerDigits: 2})
+    return timeString;
+}
+
+const displayErrorMessage = () => {
+    if(!errorMessage){
+        errorContainer.style.display = 'none';
+        return;
+    }
+    errorContainer.innerText = errorMessage;
+    errorContainer.style.display = 'block';
 }

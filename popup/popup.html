@@ -14,13 +14,15 @@
 </head>
 
 <body>
-    <div class="topbar">
+    <div class="top-bar">
         <img class="logo" alt="logo" src="../resources/icons/infinite64.png"/>
-        <div class="appName">Looper++</div>
+        <div>Youtube Looper</div>
     </div>
-
-    <form class="main-form">
+    <div class="info-container">
+        <div id="errorContainer" class="error-container"></div>
         <div id="status" class="status"></div>
+    </div>
+    <form class="main-form" id="mainForm">
         <div class="input-container">
             <label>
                 Start at:
@@ -34,7 +36,7 @@
         </div>
         <button id="loopItButton">loop it!</button>
     </form>
-    <div class="bottombar">
+    <div class="bottom-bar">
         Made with <span>&ensp;&#128154&ensp;</span> by monyik
     </div>
 </body>
