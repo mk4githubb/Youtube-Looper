@@ -1,7 +1,7 @@
 {
   "name": "Youtube Looper",
   "description": "An app that lets you loop a youtube video between two given times.",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "manifest_version": 2,
   "icons": {
     "16": "./resources/icons/infinite16.png",
