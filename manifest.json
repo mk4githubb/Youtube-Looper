@@ -23,5 +23,5 @@
     "default_icon": "./resources/icons/infinite64.png",
     "default_popup": "./popup/popup.html"
   },
-  "permissions": [ "tabs", "storage" , "declarativeContent"]
+  "permissions": [ "tabs", "declarativeContent"]
 }
