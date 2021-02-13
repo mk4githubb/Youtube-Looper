@@ -1,3 +1,7 @@
+/*
+ * Added variables outside so that they don't need to be selected everytime from the docuement or passed to each method.
+ * The values of these will be updated when DOM is loaded.
+ */
 let startTimeInput;
 let finishTimeInput;
 let loopItButton;
@@ -19,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     attachButtonCallback();
 });
 
+// Attaches the right callback to the button.
 const attachButtonCallback = () => {
     loopItButton.addEventListener("click", (event) => {
         event.preventDefault();
@@ -33,6 +38,7 @@ const attachButtonCallback = () => {
     })
 }
 
+// This method can make any request to content script.
 const makeRequest = (action, userInputTimes) => {
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {action, ...userInputTimes }, response => {
@@ -41,14 +47,12 @@ const makeRequest = (action, userInputTimes) => {
     });
 }
 
+// This method makes only fetchCurrentState Request
 const fetchCurrentState = () => {
-    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {action: "fetchCurrentState"}, response => {
-           updatePopupPage(response)
-        });
-    });
+    makeRequest({action: "fetchCurrentState"});
 }
 
+// fetches and validates time input by users.
 const fetchInputTimes = () => {
     const startTime = convertTimeStringToSeconds(startTimeInput.value);
     const finishTime = convertTimeStringToSeconds(finishTimeInput.value);
@@ -62,7 +66,38 @@ const fetchInputTimes = () => {
     }
     return { startTime, finishTime}
 }
+// converts the time input by user to Integer seconds
+const convertTimeStringToSeconds = (timeString) => {
+    const splittedTimes = timeString.split(":").map(i => Number(i));
 
+    let seconds = 0;
+    for(let i = 0; i < splittedTimes.length; i++){
+        seconds = seconds*60 + splittedTimes[i];
+    }
+    return seconds
+}
+
+// converts integer time to string
+const convertSecondsToFormattedString = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const remainder = Math.round(seconds % 3600);
+    const minutes = Math.floor(remainder / 60);
+    seconds = Math.round(remainder % 60);
+
+    let timeString = ""
+
+    if(hours){
+        timeString += hours.toLocaleString('en-US', {minimumIntegerDigits: 2}) + ":"
+    }
+
+    if(minutes){
+        timeString += minutes.toLocaleString('en-US', {minimumIntegerDigits: 2}) + ":"
+    }
+    timeString += seconds.toLocaleString('en-US', {minimumIntegerDigits: 2})
+    return timeString;
+}
+
+// updates the chrome extensions popup window according.
 const updatePopupPage = (response) => {
     if(chrome.runtime.lastError || !response){
         console.log("Error Response: ", response)
@@ -84,8 +119,8 @@ const updatePopupPage = (response) => {
     videoDuration = response.playable.duration;
 
     if(response.inLoop){
-        startTimeInput.value = convertSecondsToFormattedTime(response.playing.startTime);
-        finishTimeInput.value = convertSecondsToFormattedTime(response.playing.finishTime);
+        startTimeInput.value = convertSecondsToFormattedString(response.playing.startTime);
+        finishTimeInput.value = convertSecondsToFormattedString(response.playing.finishTime);
         loopItButton.innerText = "stop it!";
         return;
     }
@@ -93,35 +128,6 @@ const updatePopupPage = (response) => {
     finishTimeInput.value = "";
     loopItButton.innerText = "loop it!";
     displayErrorMessage();
-}
-
-const convertTimeStringToSeconds = (timeString) => {
-    const splittedTimes = timeString.split(":").map(i => Number(i));
-
-    let seconds = 0;
-    for(let i = 0; i < splittedTimes.length; i++){
-        seconds = seconds*60 + splittedTimes[i];
-    }
-    return seconds
-}
-
-const convertSecondsToFormattedTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const remainder = Math.round(seconds % 3600);
-    const minutes = Math.floor(remainder / 60);
-    seconds = Math.round(remainder % 60);
-
-    let timeString = ""
-
-    if(hours){
-        timeString += hours.toLocaleString('en-US', {minimumIntegerDigits: 2}) + ":"
-    }
-
-    if(minutes){
-        timeString += minutes.toLocaleString('en-US', {minimumIntegerDigits: 2}) + ":"
-    }
-    timeString += seconds.toLocaleString('en-US', {minimumIntegerDigits: 2})
-    return timeString;
 }
 
 const displayErrorMessage = () => {

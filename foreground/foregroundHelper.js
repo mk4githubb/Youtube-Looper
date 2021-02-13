@@ -14,6 +14,7 @@ const initialState = {
 
 let currentState = {...initialState};
 
+// handles the requests coming from popup
 const handleRequest = (action , data, sendResponse) => {
 
     if(action === 'requestOrStop'){
@@ -35,8 +36,10 @@ const handleRequest = (action , data, sendResponse) => {
     sendResponse({...currentState})
 }
 
+// gets current page URL
 const fetchCurrentURL = () => window.location.href;
 
+// gets 1st HTML Video element
 const fetchPlayingVideo = () => {
     const allVideos = document.getElementsByTagName('video');
 
@@ -46,6 +49,7 @@ const fetchPlayingVideo = () => {
     return allVideos[0];
 }
 
+// sets up the actual loop
 const setUpLoop = (currentState) => {
     const {startTime, finishTime} = currentState.playing;
     const player = fetchPlayingVideo();
@@ -58,6 +62,7 @@ const setUpLoop = (currentState) => {
     currentState.intervalID = setInterval(() => player.currentTime = startTime, (finishTime - startTime) * 1000);
 }
 
+// cancels the loop
 const cancelLoop = (currentState) => {
     if(!currentState.intervalID){
         alert("Something went wrong");
