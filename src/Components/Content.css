@@ -1,0 +1,39 @@
+@import "../App.css";
+
+.content {
+    margin-top: 25px;
+    /*padding: 5px;*/
+    border-radius: 10px;
+}
+
+.input-time-container {
+    display: flex;
+    gap: 5px;
+    padding: 5px;
+    align-items: center;
+}
+
+.loop-icon-container {
+    position: relative;
+    top: 9px;
+}
+
+.input-time-field {
+    flex-grow: 1;
+}
+
+.input-time {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.thumbnail {
+    max-height: 225px;
+}
+
+.button-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+}
