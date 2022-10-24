@@ -11,21 +11,22 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import './Content.css';
 
 type ContentType = {
-    videoId: string
+    videoId: string | null;
 }
 
 const Content = ({videoId}: ContentType) => {
     const [videoDetails, setVideoDetails] = useState<any>(null)
 
     useEffect(() => {
-        fetchYoutubeVideoDetails(videoId)
-            .then(response => {
-                console.log(response);
-                setVideoDetails(response);
-                return response;
+        videoId && fetchYoutubeVideoDetails(videoId)
+            .then(res => {
+                console.log('11 res: ', res)
+                setVideoDetails(res)
+                return res;
             })
-            .catch(err => console.log('error fetching video details: ', err))
+            .catch(err => console.log("err fetching video details"))
     }, [videoId])
+
 
     return (
         <div className="content">
