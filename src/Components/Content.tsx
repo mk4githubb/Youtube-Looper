@@ -28,40 +28,46 @@ const Content = ({videoId}: ContentType) => {
     }, [videoId])
 
     return (
-        <Card className="content">
-            <CardMedia
-                className="thumbnail"
-                component="img"
-                image={videoDetails?.thumbnail_url}
-                alt="video thumbnail"
-            />
-            <CardContent>
-                <Typography gutterBottom component="div" variant="h5">
-                    {videoDetails && getFirstNWords(videoDetails.title, 4)}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    {videoDetails?.author_name}
-                </Typography>
-            </CardContent>
-            <Box className="input-time-container">
-                <Box className="input-time">
-                    {/*<TextField className="input-time" label="Hour" variant="standard" size="small"/>*/}
-                    <TextField className="input-time-field" label="Minutes" variant="standard" size="small"/>
-                    <TextField className="input-time-field" label="Seconds" variant="standard" size="small"/>
+        <div className="content">
+            <div className="flex-container brand-name-container">
+                <div className="icon-container">
+                    <img src={require("../assets/icons/youtube-icon.png")} alt="youtube icon"/>
+                </div>
+                <Typography variant="h4">YouTube Looper</Typography>
+            </div>
+            <Card className="card-container">
+                <CardMedia
+                    className="thumbnail"
+                    component="img"
+                    image={videoDetails?.thumbnail_url}
+                    alt="video thumbnail"
+                />
+                <CardContent sx={{paddingBottom: 0}}>
+                    <Typography gutterBottom component="div" variant="h5">
+                        {videoDetails && getFirstNWords(videoDetails.title, 4)}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {videoDetails?.author_name}
+                    </Typography>
+                </CardContent>
+                <Box className="input-time-container">
+                    <Box className="input-time">
+                        <TextField className="input-time-field" label="Minutes" variant="standard" size="small"/>
+                        <TextField className="input-time-field" label="Seconds" variant="standard" size="small"/>
+                    </Box>
+                    <Box className="loop-icon-container">
+                        <AllInclusiveIcon className="input-time" fontSize="small"/>
+                    </Box>
+                    <Box className="input-time">
+                        <TextField className="input-time-field" label="Minutes" variant="standard" size="small"/>
+                        <TextField className="input-time-field" label="Seconds" variant="standard" size="small"/>
+                    </Box>
                 </Box>
-                <Box className="loop-icon-container">
-                    <AllInclusiveIcon className="input-time" fontSize="small"/>
+                <Box className="button-container">
+                    <Button size="small" variant="contained">Put on Loop!</Button>
                 </Box>
-                <Box className="input-time">
-                    {/*<TextField className="input-time" label="Hour" variant="standard" size="small"/>*/}
-                    <TextField className="input-time-field" label="Minutes" variant="standard" size="small"/>
-                    <TextField className="input-time-field" label="Seconds" variant="standard" size="small"/>
-                </Box>
-            </Box>
-            <Box className="button-container">
-                <Button size="small" variant="contained">Loop it!</Button>
-            </Box>
-        </Card>
+            </Card>
+        </div>
     )
 }
 
