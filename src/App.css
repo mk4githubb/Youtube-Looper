@@ -1,43 +1,12 @@
 .App {
     text-align: center;
-    margin: 5px;
 }
 
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header {
-    padding: 5px;
-    height: 75px;
-    display: flex;
-    flex-grow: 1;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 10px;
-    background: rgb(238, 174, 202);
-    background: linear-gradient(90deg, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
-}
-
-.icon-container__close {
-    flex-grow: 0.05;
+.brand-name-container {
     padding: 10px;
-}
-
-
-.header a {
-    text-decoration: none;
-    flex-grow: 1;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-}
-
-.title {
-    margin-left: 10px;
-    font-size: x-large;
+    color: aliceblue;
+    background: #9f3535;
+    font-weight: bolder;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
