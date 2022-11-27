@@ -22,9 +22,13 @@ chrome.runtime.onMessage.addListener(
         console.log('Message received on Content: ', request)
         const {type} = request;
         if (type === "FETCH_VIDEO_ID") {
+            const videoNode = fetchVideoNode();
             console.log("Responding with: ", {
                 type: request.type,
-                data: getVideoIdByUrl(window.location.href)
+                data: {
+                    videoId: getVideoIdByUrl(window.location.href),
+                    duration: videoNode && videoNode.duration;
+                }
             })
 
             return sendResponse({
@@ -34,6 +38,11 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
+
+
+const fetchVideoNode = () => {
+    return document.querySelector('video');
+}
 
 
 const start = () => {

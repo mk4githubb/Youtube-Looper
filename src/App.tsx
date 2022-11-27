@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import Content from "./Components/Content";
+import Content from "./components/Content";
 import {sendMessage} from "./utils/ChromeUtils";
 import {FETCH_VIDEO_ID} from "./common/Constants";
 import Typography from "@mui/material/Typography";
